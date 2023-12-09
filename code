@@ -1,0 +1,73 @@
+import tkinter as tk
+from tkinter import messagebox
+
+class PizzaOrderApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Pizza Order App")
+
+        self.size_var = tk.StringVar()
+        self.toppings_var = tk.StringVar()
+        self.breadsticks_var = tk.IntVar()
+        self.drink_var = tk.IntVar()
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Size options
+        size_label = tk.Label(self.master, text="Select Pizza Size:")
+        size_label.pack()
+
+        size_options = [("8\" - $6", "8"), ("10\" - $9", "10"), ("14\" - $14", "14")]
+
+        for text, size in size_options:
+            size_button = tk.Radiobutton(self.master, text=text, variable=self.size_var, value=size)
+            size_button.pack()
+
+        # Topping options
+        toppings_label = tk.Label(self.master, text="Select Toppings:")
+        toppings_label.pack()
+
+        toppings_options = [("Cheese", 1), ("Pepperoni", 1), ("Sausage", 1), ("Onions", 1)]
+
+        for text, cost in toppings_options:
+            topping_checkbox = tk.Checkbutton(self.master, text=text, variable=self.toppings_var, onvalue=cost, offvalue=0)
+            topping_checkbox.pack()
+
+        # Breadsticks and drink
+        breadsticks_label = tk.Label(self.master, text="Add Breadsticks and Drink?")
+        breadsticks_label.pack()
+
+        breadsticks_radio_yes = tk.Radiobutton(self.master, text="Yes", variable=self.breadsticks_var, value=1)
+        breadsticks_radio_no = tk.Radiobutton(self.master, text="No", variable=self.breadsticks_var, value=0)
+
+        breadsticks_radio_yes.pack()
+        breadsticks_radio_no.pack()
+
+        # Calculate button
+        calculate_button = tk.Button(self.master, text="Calculate Total", command=self.calculate_total)
+        calculate_button.pack()
+
+    def calculate_total(self):
+        # Pizza size cost
+        size_cost = int(self.size_var.get())
+
+        # Toppings cost
+        toppings_cost = int(self.toppings_var.get())
+
+        # Breadsticks and drink cost
+        breadsticks_cost = 5 if self.breadsticks_var.get() == 1 else 0
+
+        # Total cost before tax
+        total_before_tax = size_cost + toppings_cost + breadsticks_cost
+
+        # Apply 7% tax
+        total_with_tax = total_before_tax * 1.07
+
+        # Display the total to the customer
+        messagebox.showinfo("Order Summary", f"Total Cost: ${total_with_tax:.2f}")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = PizzaOrderApp(root)
+    root.mainloop()
